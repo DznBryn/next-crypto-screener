@@ -11,7 +11,7 @@ function Header() {
 		<header>
 			<div className='main-container inner'>
 				<Link href='/'>
-					<Image src='logo.svg' alt='CoinPulse Logo' width={150} height={50} />
+					<Image src='/logo.svg' alt='CoinPulse Logo' width={150} height={50} />
 				</Link>
 				<nav>
 					<Link
@@ -22,7 +22,12 @@ function Header() {
 						})}>
 						Home
 					</Link>
-					<p>Search Modal</p>
+					<button
+						type='button'
+						className='nav-link'
+						aria-label='Open search modal'>
+						Search
+					</button>
 					<Link
 						href='/coins'
 						className={cn('nav-link', {
