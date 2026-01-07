@@ -1,9 +1,35 @@
-import React from 'react'
+import { CoinOverviewSkeleton } from '@/components/CoinOverview';
+import { TrendingCoinsSkeleton } from '@/components/TrendingCoins';
+import dynamic from 'next/dynamic';
 
-const Page = () => {
-  return (
-    <div>Page</div>
-  )
-}
+const CoinOverview = dynamic(() => import('@/components/CoinOverview'), {
+	loading: () => <CoinOverviewSkeleton />,
+	ssr: true,
+});
 
-export default Page
+const TrendingCoins = dynamic(() => import('@/components/TrendingCoins'), {
+	loading: () => <TrendingCoinsSkeleton />,
+	ssr: true,
+});
+
+const Page = async () => {
+	return (
+		<main className='main-container'>
+			<section className='home-grid'>
+				<div id='coin-overview'>
+					<div className='header'>
+						<CoinOverview name='bitcoin' />
+					</div>
+				</div>
+				<div id="trending-coins">
+					<TrendingCoins />
+				</div>
+			</section>
+			<section className='w-full mt-7 space-y-4'>
+				<p>Categories</p>
+			</section>
+		</main>
+	);
+};
+
+export default Page;
