@@ -1,7 +1,6 @@
 import { coingeckoFetch } from '@/lib/coingecko.actions';
 import { formatCryptoPrice } from '@/lib/utils';
 import Image from 'next/image';
-import React from 'react';
 
 const CoinOverview = async ({ name }: { name: string }) => {
 	let data: CoinDetailsData;

@@ -65,7 +65,7 @@ const DataTable = <T,>({
 								key={colIndex}
 								className={cn(
 									styles?.bodyCell,
-									'overflow-hidden rounded-lg border-b border-purple-100/5 hover:bg-dark-300/30:important relative',
+									'overflow-hidden rounded-lg border-b border-purple-100/5 hover:bg-dark-300/30! relative',
 									column.cellClassName
 								)}>
 								{column.cell(row, rowIndex)}

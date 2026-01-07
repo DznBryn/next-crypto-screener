@@ -54,8 +54,8 @@ const columns: DataTableColumn<TrendingCoin>[] = [
 		cellClassName: 'change-cell',
 		cell: (coin) => {
 			const item = coin.item;
-			const priceChange = item.data.price_change_percentage_24h.usd;
-			const isTrending = priceChange > 0;
+			const priceChange = item.data.price_change_percentage_24h?.usd ?? 0;
+			const isTrending = priceChange >= 0;
 
 			return (
 				<span
@@ -63,6 +63,7 @@ const columns: DataTableColumn<TrendingCoin>[] = [
 						isTrending ? 'text-green-500' : 'text-red-500'
 					}`}>
 					{isTrending ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
+					{priceChange >= 0 ? '+' : ''}
 					{priceChange.toFixed(2)}%
 				</span>
 			);
