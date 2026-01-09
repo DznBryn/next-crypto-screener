@@ -1,3 +1,4 @@
+import { CategorySkeleton } from '@/components/Categories';
 import { CoinOverviewSkeleton } from '@/components/CoinOverview';
 import { TrendingCoinsSkeleton } from '@/components/TrendingCoins';
 import dynamic from 'next/dynamic';
@@ -12,6 +13,11 @@ const TrendingCoins = dynamic(() => import('@/components/TrendingCoins'), {
 	ssr: true,
 });
 
+const Categories = dynamic(() => import('@/components/Categories'), {
+	loading: () => <CategorySkeleton />,
+	ssr: true,
+});
+
 const Page = async () => {
 	return (
 		<main className='main-container'>
@@ -20,7 +26,7 @@ const Page = async () => {
 				<TrendingCoins />
 			</section>
 			<section className='w-full mt-7 space-y-4'>
-				<p>Categories</p>
+				<Categories />
 			</section>
 		</main>
 	);
