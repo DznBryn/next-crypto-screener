@@ -91,7 +91,7 @@ const TrendingCoins = async () => {
 			<p className='text-xl font-semibold mb-4'>Trending Coins</p>
 			<DataTable
 				columns={columns}
-				data={trendingCoinsData.coins.slice(0, 5)}
+				data={trendingCoinsData.coins.slice(0, 10)}
 				rowKey={(coin) => coin.item.id}
 			/>
 		</div>
@@ -103,7 +103,7 @@ export const TrendingCoinsSkeleton = () => {
 		<div id='trending-coins'>
 			<div className='h-7 w-48 bg-gray-700 animate-pulse rounded mb-4' />
 			<div className='space-y-3'>
-				{[...Array(5)].map((_, i) => (
+				{[...Array(10)].map((_, i) => (
 					<div
 						key={i}
 						className='flex items-center gap-4 p-4 bg-gray-800/50 rounded-lg'>
