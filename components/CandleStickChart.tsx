@@ -41,7 +41,7 @@ const CandleStickChart = ({
 			CHART_PERIODS.find((p) => p.label === period) ?? {};
 		try {
 			// Fetch OHLC data based on the selected period
-			const response = await coingeckoFetch<OHLC[]>(`/coins/${coinId}/ohlc`, {
+			const response = await coingeckoFetch<OHLC[]>(`coins/${coinId}/ohlc`, {
 				vs_currency: 'usd',
 				days: selectedPeriod,
 				precision: 'full',
@@ -53,9 +53,7 @@ const CandleStickChart = ({
 	};
 
 	const handlePeriodCHange = (newPeriod: string) => {
-		console.log('Period changed to:', newPeriod);
 		if (newPeriod === period) return;
-
 		// Fetch new OHLC data for the selected period. useTransition ensures UI remains responsive.
 		startTransition(async () => {
 			setPeriod(newPeriod);
@@ -117,40 +115,42 @@ const CandleStickChart = ({
 	useEffect(() => {
 		if (!chartContainerRef.current) return;
 		const showTime = ['daily', 'weekly', 'monthly'].includes(period);
-		chartRef.current = createChart(chartContainerRef.current, {
+
+		const chart = createChart(chartContainerRef.current, {
 			...getChartConfig(height, showTime),
 			width: chartContainerRef.current.clientWidth,
 		});
 
-		candlestickSeriesRef.current = chartRef.current.addSeries(
-			CandlestickSeries,
-			{
-				upColor: CHART_COLORS.candleUp,
-				downColor: CHART_COLORS.candleDown,
-				wickUpColor: CHART_COLORS.candleUp,
-				wickDownColor: CHART_COLORS.candleDown,
-				borderVisible: true,
-				wickVisible: true,
-			}
+		const series = chart.addSeries(CandlestickSeries, {
+			upColor: CHART_COLORS.candleUp,
+			downColor: CHART_COLORS.candleDown,
+			wickUpColor: CHART_COLORS.candleUp,
+			wickDownColor: CHART_COLORS.candleDown,
+			borderVisible: true,
+			wickVisible: true,
+		});
+		const convertedToSeconds = ohlcData.map<OHLC>(
+			([time, open, high, low, close]: OHLC) =>
+				[Math.floor(time / 1000), open, high, low, close] as OHLC
 		);
+		series.setData(convertOHLCData(convertedToSeconds));
+		chart?.timeScale().fitContent();
 
-		candlestickSeriesRef.current.setData(convertOHLCData(ohlcData));
-		chartRef.current?.timeScale().fitContent();
+		chartRef.current = chart;
+		candlestickSeriesRef.current = series;
 
 		const observer = new ResizeObserver((entries) => {
 			if (!entries.length) return;
-			chartRef.current?.applyOptions({
+			chart.applyOptions({
 				width: entries[0].contentRect.width ?? 0,
 			});
 		});
 
-		if (chartContainerRef.current) {
-			observer.observe(chartContainerRef.current);
-		}
+		observer.observe(chartContainerRef.current);
 
 		return () => {
-			chartRef.current?.remove();
 			observer.disconnect();
+			chart.remove();
 			chartContainerRef.current = null;
 			candlestickSeriesRef.current = null;
 		};
@@ -158,7 +158,7 @@ const CandleStickChart = ({
 
 	useEffect(() => {
 		if (candlestickSeriesRef.current) {
-			const convertedToSeconds = ohlcData.map(
+			const convertedToSeconds = ohlcData.map<OHLC>(
 				([time, open, high, low, close]: OHLC) =>
 					[Math.floor(time / 1000), open, high, low, close] as OHLC
 			);

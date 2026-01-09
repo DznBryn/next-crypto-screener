@@ -16,7 +16,7 @@ const CoinOverview = async ({ name }: { name: string }) => {
 		coingeckoFetch<CoinDetailsData>(`/coins/${name}`, {
 			dex_pair_format: 'symbol',
 		}),
-		coingeckoFetch<OHLC[]>(`/coins/${name}/ohlc`, {
+		coingeckoFetch<OHLC[]>(`coins/${name}/ohlc`, {
 			vs_currency: 'usd',
 			days: 1,
 			precision: 'full',
@@ -45,9 +45,12 @@ const CoinOverview = async ({ name }: { name: string }) => {
 					/>
 					<div className='info'>
 						<p>
-							{data.name} / {data.symbol.toUpperCase()}
+							{data.name ?? 'Crypto Coin'} /{' '}
+							{(data.symbol ?? '').toUpperCase() || '—'}
 						</p>
-						<h1>{formatCryptoPrice(data.market_data.current_price.usd)}</h1>
+						{typeof data.market_data?.current_price?.usd === 'number' ? (
+							<h1>{formatCryptoPrice(data.market_data.current_price.usd)}</h1>
+						) : null}
 					</div>
 				</div>
 			</CandleStickChart>
