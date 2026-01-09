@@ -87,20 +87,20 @@ const TrendingCoins = async () => {
 		return <TrendingCoinsSkeleton />;
 	}
 	return (
-		<>
+		<div id='trending-coins' className='p-4'>
 			<p className='text-xl font-semibold mb-4'>Trending Coins</p>
 			<DataTable
 				columns={columns}
 				data={trendingCoinsData.coins.slice(0, 5)}
 				rowKey={(coin) => coin.item.id}
 			/>
-		</>
+		</div>
 	);
 };
 
 export const TrendingCoinsSkeleton = () => {
 	return (
-		<>
+		<div id='trending-coins'>
 			<div className='h-7 w-48 bg-gray-700 animate-pulse rounded mb-4' />
 			<div className='space-y-3'>
 				{[...Array(5)].map((_, i) => (
@@ -114,7 +114,7 @@ export const TrendingCoinsSkeleton = () => {
 					</div>
 				))}
 			</div>
-		</>
+		</div>
 	);
 };
 

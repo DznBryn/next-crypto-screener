@@ -16,14 +16,8 @@ const Page = async () => {
 	return (
 		<main className='main-container'>
 			<section className='home-grid'>
-				<div id='coin-overview'>
-					<div className='header'>
-						<CoinOverview name='bitcoin' />
-					</div>
-				</div>
-				<div id="trending-coins">
-					<TrendingCoins />
-				</div>
+				<CoinOverview name='bitcoin' />
+				<TrendingCoins />
 			</section>
 			<section className='w-full mt-7 space-y-4'>
 				<p>Categories</p>
