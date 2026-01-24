@@ -121,3 +121,36 @@ export function convertOHLCData(data: OHLC[]) {
     }))
     .filter((item, index, arr) => index === 0 || item.time !== arr[index - 1].time);
 }
+
+export const ELLIPSIS = 'ellipsis' as const;
+export const buildPageNumbers = (
+  currentPage: number,
+  totalPages: number,
+): (number | typeof ELLIPSIS)[] => {
+  const MAX_VISIBLE_PAGES = 5;
+  const pages: (number | typeof ELLIPSIS)[] = [];
+
+  if (totalPages <= MAX_VISIBLE_PAGES) {
+    Array.from({ length: totalPages }, (_, i) => i + 1).forEach((page) => pages.push(page));
+    return pages;
+  }
+
+  pages.push(1);
+  const start = Math.max(2, currentPage - 1);
+  const end = Math.min(totalPages - 1, Number(currentPage) + 1);
+
+  if (start > 2) {
+    pages.push(ELLIPSIS);
+  }
+
+  for (let index = start; index <= end; index+=1) {
+    pages.push(index);
+  }
+  if (end < totalPages - 1) {
+    pages.push(ELLIPSIS);
+  }
+
+  pages.push(totalPages);
+
+  return pages;
+};
